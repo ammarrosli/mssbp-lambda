@@ -27,7 +27,7 @@ provider:
     name: aws
     runtime: provided.al2
     architecture: arm64
-    stage: dev
+    stage: prod
     timeout: 15
     region: ap-southeast-1
     versionFunctions: false
