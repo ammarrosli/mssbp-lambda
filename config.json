@@ -1,0 +1,20 @@
+{
+    "TELEGRAM_CHAT_ID": "-1001267327365",
+    "MG_DOMAIN": "mailgun.digitalsymphony.it",
+    "SENTINO_ENDPOINT": "https://www.sentinocrm.com/service2/register?ws=1",
+    "MG_SENDER_EMAIL": "noreply@mssbp.com.my",
+    "dev": {
+        "DDBTABLE_MSSBP": "develop-mssbp",
+        "PITR_ACTIVE": false,
+        "SENTINO_PROJECT_ID": "Jtd9tL1820180423115313",
+        "SENTINO_SOURCE_ID": "14",
+        "TEST": true
+    },
+    "prod": {
+        "DDBTABLE_MSSBP": "mssbp",
+        "PITR_ACTIVE": true,
+        "SENTINO_PROJECT_ID": "svw9Zn4S20240703120307",
+        "SENTINO_SOURCE_ID": "1012JGChlGDm20240703120417",
+        "TEST": false
+    }
+}

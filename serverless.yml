@@ -1,0 +1,88 @@
+# Welcome to Serverless!
+#
+# This file is the main config file for your service.
+# It's very minimal at this point and uses default values.
+# You can always add more config options for more control.
+# We've included some commented out config examples here.
+# Just uncomment any of them to get that config option.
+#
+# For full config options, check the docs:
+#    docs.serverless.com
+#
+# Happy Coding!
+
+service: mssbp-lambda
+# app and org for use with dashboard.serverless.com
+#app: your-app-name
+#org: your-org-name
+
+# You can pin your service to only deploy with a specific Serverless version
+# Check out our docs for more details
+frameworkVersion: '3'
+
+custom:
+    configs: ${file(config.json)}
+
+provider:
+    name: aws
+    runtime: provided.al2
+    architecture: arm64
+    stage: dev
+    timeout: 15
+    region: ap-southeast-1
+    versionFunctions: false
+    endpointType: regional
+    deploymentBucket:
+        name: serverless-deploys-ds
+    environment:
+        MG_DOMAIN: ${self:custom.configs.MG_DOMAIN}
+        TELEGRAM_CHAT_ID: ${self:custom.configs.TELEGRAM_CHAT_ID}
+        SENTINO_ENDPOINT: ${self:custom.configs.SENTINO_ENDPOINT}
+        MG_SENDER_EMAIL: ${self:custom.configs.MG_SENDER_EMAIL}
+        DDBTABLE_MSSBP: ${self:custom.configs.${sls:stage}.DDBTABLE_MSSBP}
+        SENTINO_PROJECT_ID: ${self:custom.configs.${sls:stage}.SENTINO_PROJECT_ID}
+        SENTINO_SOURCE_ID: ${self:custom.configs.${sls:stage}.SENTINO_SOURCE_ID}
+        TEST: ${self:custom.configs.${sls:stage}.TEST}
+        FUNCTION_NAME: mssbp
+    iam:
+      role:
+        statements:
+          - Effect: 'Allow'
+            Resource: '*'
+            Action: 
+              - 'dynamodb:PutItem'
+              - 'ssm:GetParameters'
+
+package:
+  individually: true
+
+functions:
+    Mssbp:
+        name: ${sls:stage}-msbpp
+        handler: bootstrap
+        package:
+          artifact: build/lambda/mssbp.zip
+        events:
+            - http:
+                  path: mssbp/contacts
+                  cors: true
+                  method: post
+
+resources:
+    Resources:
+        MssbpResources:
+            DeletionPolicy: Retain
+            Type: AWS::DynamoDB::Table
+            Properties:
+                TableName: ${self:provider.environment.DDBTABLE_MSSBP}
+                DeletionProtectionEnabled: true
+                AttributeDefinitions:
+                    - AttributeName: uuid
+                      AttributeType: S
+                KeySchema:
+                    - AttributeName: uuid
+                      KeyType: HASH
+                BillingMode: PAY_PER_REQUEST
+                PointInTimeRecoverySpecification:
+                    PointInTimeRecoveryEnabled: ${self:custom.configs.${sls:stage}.PITR_ACTIVE}
+
