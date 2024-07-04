@@ -35,7 +35,7 @@ type Contact struct {
 	Name      string `json:"name"`
 	Email     string `json:"email"`
 	Phone     string `json:"phone"`
-	Location     string `json:"location"`
+	Language     string `json:"language"`
 	Type     string `json:"type"`
 	Source    string `json:"source"`
 	UtmSources    string `json:"utm_sources"`
@@ -95,7 +95,7 @@ func SaveToDynamoDb(info *Contact) error {
 		"name": info.Name,
 		"email": info.Email,
 		"phone": info.Phone,
-		"location": info.Location,
+		"language": info.Language,
 		"type": info.Type,
 		"source": info.Source,
 		"utm_sources": info.UtmSources,
@@ -208,11 +208,11 @@ func SaveToSentino(info *Contact) error {
          			<date_of_birth xsi:type="xsd:string"></date_of_birth>
          			<occupation xsi:type="xsd:string"></occupation>
          			<nationality xsi:type="xsd:string"></nationality>
-         			<language xsi:type="xsd:string"></language>
+         			<language xsi:type="xsd:string">` + info.Language + `</language>
          			<family_size xsi:type="xsd:string"></family_size>
          			<buying_reason xsi:type="xsd:string"></buying_reason>
          			<propertyType xsi:type="xsd:string">` + info.Type + `</propertyType>
-         			<preferred_location xsi:type="xsd:string">` + info.Location + `</preferred_location>
+         			<preferred_location xsi:type="xsd:string"></preferred_location>
          			<preferred_state xsi:type="xsd:string"></preferred_state>
          			<preferred_price_range xsi:type="xsd:string"></preferred_price_range>
          			<preferred_price xsi:type="xsd:string"></preferred_price>
@@ -273,7 +273,8 @@ func SaveToSentino(info *Contact) error {
          			<email xsi:type="xsd:string">` + info.Email + `</email>
          			<mobile xsi:type="xsd:string">` + info.Phone + `</mobile>
 					<propertyType xsi:type="xsd:string">` + info.Type + `</propertyType>
-         			<preferred_location xsi:type="xsd:string">` + info.Location + `</preferred_location>
+                    <language xsi:type="xsd:string">` + info.Language + `</language>
+         			<preferred_location xsi:type="xsd:string"></preferred_location>
          			<address xsi:type="xsd:string"></address>
          			<questions xsi:type="xsd:string">` + quests + `</questions>
          			<project xsi:type="xsd:string">` + os.Getenv("SENTINO_PROJECT_ID") + `</project>

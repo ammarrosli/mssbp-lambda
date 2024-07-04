@@ -35,7 +35,7 @@ func TestEDM(t *testing.T) {
 			"name": "Tester",
 			"email": "dstester@maildrop.cc",
 			"phone": "0123456789",
-			"location": "",
+			"language": "",
 			"type": "",
 			"utm_sources": "",
 			"source": "SearchOP1"
